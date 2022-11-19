@@ -1,0 +1,2 @@
+C:\Users\20390\Desktop\tmp\Debug\tmp.exe
+C:\Users\20390\Desktop\Cpp_tmp\Debug\tmp.exe
