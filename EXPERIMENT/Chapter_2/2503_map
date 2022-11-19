@@ -1,0 +1,11 @@
+#include<iostream>
+#include<map>
+#include<cstdio>
+using namespace std;
+map<string, string>dic;
+map<string, bool>dicflag;
+int main()
+{
+	string words;
+	while(scanf("%s",words)&&)
+}
