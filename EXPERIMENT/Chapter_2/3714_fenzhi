@@ -1,0 +1,57 @@
+#include<iostream>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+using namespace std;
+const int maxn = 2e5 + 5;
+const int inf = 1e50;
+struct Point {
+	double x, y;
+	int groupflag;
+	bool operator <(const Point& a)const {
+		return x < a.x;
+	}
+}p[maxn],q[maxn];
+
+double Distance(const Point& p1, const Point& p2) {
+	return sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
+}
+
+bool cmp2(Point a, Point b)
+{
+	return a.y < b.y;
+}
+
+double NearestDistance(int l, int r) {
+	if (l == r) return inf;
+	int cnt = 0;
+	int mid = (l + r) >> 1;//位运算加快运行速度
+	double ans = min(NearestDistance(l, mid), NearestDistance(mid + 1, r));//二分分别计算左右最近距离
+	for (int i = l; i <= r; i++)
+		if (fabs(p[i].x - p[mid].x) <= ans)
+			q[cnt++] = p[i];
+	sort(q, q + cnt, cmp2);
+	for (int i = 0; i < cnt; i++) {
+		for (int j = i + 1; j < cnt; j++) {
+			if (q[i].groupflag == q[j].groupflag) continue;
+			if (q[j].y - q[i].y > ans) break;
+			ans = min(ans, Distance(q[i], q[j]));
+		}
+	}
+	return ans;
+}
+int main()
+{
+	int m, n, i;
+	cin >> n;
+	while (n--) {
+		cin >> m;
+		for (i = 0; i < 2 * m; i++) {
+			scanf("%lf%lf", &p[i].x, &p[i].y);
+			if (i < m) p[i].groupflag = 0;
+			else p[i].groupflag = 1;
+		}
+		sort(p, p + 2 * m);
+		printf("%.3f\n", NearestDistance(0,2*m-1));
+	}
+}
