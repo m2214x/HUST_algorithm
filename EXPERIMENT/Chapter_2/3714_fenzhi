@@ -4,24 +4,21 @@
 #include<algorithm>
 using namespace std;
 const int maxn = 2e5 + 5;
-const int inf = 1e50;
+const int inf = 1e10;
 struct Point {
 	double x, y;
 	int groupflag;
-	bool operator <(const Point& a)const {
+	bool operator < (const Point& a)const {
 		return x < a.x;
 	}
 }p[maxn],q[maxn];
-
 double Distance(const Point& p1, const Point& p2) {
 	return sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
 }
-
 bool cmp2(Point a, Point b)
 {
 	return a.y < b.y;
 }
-
 double NearestDistance(int l, int r) {
 	if (l == r) return inf;
 	int cnt = 0;
