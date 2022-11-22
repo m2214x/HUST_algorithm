@@ -1,0 +1,36 @@
+#include<iostream>
+#include<algorithm>
+using namespace std;
+int pre[105][105]={0};
+int dp[105],res[105];
+int a[105][105];
+int N;
+int DP()
+{
+	res[1] = dp[1];
+	int MAX = 0;
+	for (int i = 2; i <= N; i++) {
+		res[i] = max(res[i - 1] + dp[i], dp[i]);
+		MAX = max(MAX, res[i]);
+	}
+	return MAX;
+}
+int main()
+{
+	int ans = 0;
+	cin >> N;
+	for (int i = 01; i <= N; i++)
+		for (int j = 1; j <= N; j++) {
+			cin >> a[i][j];
+			pre[i][j] += a[i][j];
+		}
+	for (int i = 1; i <= N; i++) {
+		for (int j = i + 1; j <= N; j++) {
+			for (int k = 1; k <= N; k++) {
+				dp[k] = pre[k][j] - pre[k][i-1];
+			}
+			ans = max(ans, DP());
+		}
+	}
+	cout << ans << endl;
+}
