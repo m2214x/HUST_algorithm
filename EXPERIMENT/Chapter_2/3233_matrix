@@ -1,0 +1,84 @@
+#include<iostream>
+#include<cstdlib>;
+using namespace std;
+int n, k, m;
+struct Matrix {
+	int s[50][50];
+
+	void init(int x) {
+		memset(s, 0, sizeof(s));
+		for (int i = 0; i < n; i++) {
+			s[i][i] = x;
+		}
+	}
+
+	Matrix operator *(const Matrix& a)const {
+		Matrix ans;
+		ans.init(0);
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				for (int k = 0; k < n; k++) {
+					ans.s[i][j] = (ans.s[i][j] + (s[i][k] * a.s[k][j]) % m) % m;
+				}
+			}
+		}
+		return ans;
+	}
+
+	Matrix operator +(const Matrix& a)const {
+		Matrix ans;
+		ans.init(0);
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				ans.s[i][j] = (ans.s[i][j] + (s[i][j] + a.s[i][j]) % m) % m;
+			}
+		}
+		return ans;
+	}
+};
+
+Matrix quikmulti(Matrix a,int x) {
+	Matrix ans;
+	ans.init(1);
+	a = a * ans;
+	while (x) {
+		if (x & 1) ans = ans * a;
+		x >>= 1;
+		a = a * a;
+	}
+	return ans;
+}
+
+Matrix dfs(Matrix a,int k) {
+	if (k == 1) return a;
+	Matrix x, y;
+	x = dfs(a, k / 2);
+	if (k & 1) {
+		y = quikmulti(a, k / 2 + 1);
+		return x + y + (x * y);
+	}
+	else {
+		y = quikmulti(a, k / 2);
+		return x + (x * y);
+	}
+}
+Matrix ques, ans;
+int main()
+{
+	cin >> n >> k >> m;
+	int temp;
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cin >> temp;
+			ques.s[i][j] = temp % m;
+		}
+	}
+	ans = dfs(ques, k);
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cout << ans.s[i][j];
+			if (j != n - 1) cout << ' ';
+			else cout << endl;
+		}
+	}
+}
